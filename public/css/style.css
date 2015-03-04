@@ -1,0 +1,23 @@
+html, body {
+    background-color: #2C3E50;
+}
+
+.logo {
+    margin-top: 100px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #3498DB;
+}
+
+.cercle-diatonique svg {
+    display: block;
+    margin: 5px auto;
+    background: #AAA;
+    border-radius: 160px;
+}
+
+a.ui.card:hover {
+    background: #eee;
+}

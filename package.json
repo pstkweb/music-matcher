@@ -14,13 +14,7 @@
     "browserify": "~8.1.1",
     "nodemon": "~1.3.2",
     "uglify-js": "~2.4.16",
-    "reactify": "~0.71.1",
     "watchify": "~2.2.1"
-  },
-  "browserify": {
-    "transform": [
-      "reactify"
-    ]
   },
   "scripts": {
     "watch": "watchify app.js -o public/js/bundle.js -v",
@@ -35,7 +29,6 @@
   },
   "keywords": [
     "mongodb",
-    "react",
     "music",
     "harmony",
     "guitar"

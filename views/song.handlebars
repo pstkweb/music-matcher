@@ -1,0 +1,44 @@
+<div class="column row padding-reset">
+    <div class="seventeen wide column ui segment">
+        <h1>{{{ song.title }}} <small>par {{{ song.artist.name }}}</small></h1>
+        <script>
+            var progressions = [];
+        </script>
+        {{#each song.parts}}
+            <script> progressions.push({
+                root: '{{{ this.root }}}',
+                progression: '{{{ this.progression }}}'
+            });</script>
+            <div class="ui segment">
+                <div class="ui top attached label">{{{ this.element }}}</div>
+                <div class="ui grid">
+                    <div class="eight wide column">
+                        <div class="ui list">
+                            <div class="item">
+                                <div class="header">Note de base :</div>
+                                {{{ this.root }}}
+                            </div>
+                            <div class="item">
+                                <div class="header">Progression :</div>
+                                {{{ this.progression }}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eight wide column">
+                        <div class="cercle-diatonique" data-index="{{@index}}">
+                            <div class="ui compact icon buttons">
+                                <a class="ui blue button playBtn" href="#">
+                                    <i class="play icon"></i>
+                                </a>
+                                <a class="ui red button stopBtn disabled" href="#">
+                                    <i class="stop icon"></i>
+                                </a>
+                            </div>
+                            <b>Note jouée :</b> <span class="playedNote">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
