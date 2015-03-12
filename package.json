@@ -4,11 +4,12 @@
   "description": "Find harmonic similarities between two songs",
   "main": "app.js",
   "dependencies": {
-    "mongodb": "~1.4.29",
-    "mongoose": "^3.8.21",
+    "browserify": "^8.1.1",
     "express": "^4.11.1",
     "handlebars": "^2.0.0",
-    "browserify": "^8.1.1"
+    "mongodb": "~1.4.29",
+    "mongoose": "^3.8.21",
+    "serve-favicon": "^2.2.0"
   },
   "devDependencies": {
     "browserify": "~8.1.1",

@@ -7,7 +7,11 @@ html, body {
     margin-bottom: 20px;
 }
 
-h1 {
+h1, h2 {
+    margin-top: 0;
+}
+
+h1, .row h2 {
     color: #3498DB;
 }
 
@@ -20,4 +24,13 @@ h1 {
 
 a.ui.card:hover {
     background: #eee;
+}
+
+.ui.search .action:hover {
+    background: none;
+}
+
+.ui.compact.segment {
+    display: inline-block;
+    padding: 0.8em;
 }

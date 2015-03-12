@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    Utils = require("../models/Utils.js");
+    Utils = require("../models/Utils");
 
 describe("Utils", function(){
     describe("#indexOfPoint()", function(){

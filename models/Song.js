@@ -3,12 +3,11 @@
  */
 var mongoose = require("mongoose"),
     async = require("async"),
+    Utils = require("./Utils"),
+    BMH = require("./BoyerMooreHorspool"),
     schema = new mongoose.Schema({
         title: String,
-        artist: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Artist'
-        },
+        artist: String,
         parts: [{
             element: String,
             root: String,
@@ -16,10 +15,12 @@ var mongoose = require("mongoose"),
         }]
     });
 
+// Set the full text search index on song title and artist name
+schema.index({title: 'text', artist: 'text'});
+
 schema.statics.getSong = function(id, callback) {
     var song = {};
     Song.findOne({_id: id})
-        .populate('artist')
         .exec(function(err, doc){
             if (!err) {
                 song = doc;
@@ -39,7 +40,6 @@ schema.statics.random = function(nb, callback) {
                 calls.push(function(callback){
                     Song.findOne()
                         .skip(indexes[i])
-                        .populate('artist')
                         .exec(function(err, song){
                             if (err)
                                 return callback(err);
@@ -72,6 +72,45 @@ schema.statics.random = function(nb, callback) {
 
         find();
     });
+};
+
+schema.statics.search = function(q, limit, callback){
+    Song.find({ $text: { $search: q}})
+        .limit(limit)
+        .exec(function(err, songs){
+            if (!err) {
+                callback(songs);
+            }
+        });
+};
+
+schema.methods.findSimilar = function(callback){
+    var currentSong = this;
+    Song.find({ _id: { $ne: this._id}})
+        .exec(function(err, songs){
+            if (!err) {
+                var simSongs = songs.filter(function(song){
+                    for (var i=0; i<this.parts.length; i++) {
+                        var chunks = Utils.subLists(this.parts[i].progression, 4);
+                        for (var j in chunks) {
+                            for (var k=0; k<song.parts.length; k++) {
+                                if (BMH.run(chunks[j], song.parts[k].progression) != -1) {
+                                    song.similarity = {
+                                        part: k,
+                                        prog: chunks[j]
+                                    };
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+
+                    return false;
+                }, currentSong);
+
+                callback(simSongs);
+            }
+        });
 };
 
 module.exports = Song = mongoose.model('Song', schema);

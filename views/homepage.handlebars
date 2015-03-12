@@ -3,32 +3,33 @@
     <div class="twelve wide column center aligned">
         <img src="img/logo.png" alt="Logo" class="logo" />
         <form action="http://www.google.fr" class="ui form">
-            <div class="field">
+            <div class="ui search">
                 <div class="ui huge action left icon input">
                     <i class="search icon"></i>
-                    <input type="search" placeholder="Titre ou artiste" />
+                    <input type="search" class="prompt" id="searchField" placeholder="Titre ou artiste" />
                     <div class="ui huge teal submit button">
                         Rechercher
                     </div>
                 </div>
+                <div class="results"></div>
             </div>
         </form>
     </div>
     <div class="two wide column"></div>
 </div>
 <div class="four columns row">
-    <h1>Random 4 songs</h1>
-    {{#each songs}}
+    <h2>Chansons aléatoires</h2>
+    {{#songs}}
         <div class="four wide column">
-            <a class="ui teal card" href="/song/{{ this.id }}">
+            <a class="ui teal card" href="/song/{{id}}">
                 <div class="content">
-                    <div class="header">{{ this.title }}</div>
-                    <div class="meta">{{ this.artist.name }}</div>
+                    <div class="header">{{title}}</div>
+                    <div class="meta">{{artist}}</div>
                     <div class="description">
-                        {{ this.parts.length }} parties
+                        {{parts.length}} parties
                     </div>
                 </div>
             </a>
         </div>
-    {{/each}}
+    {{/songs}}
 </div>

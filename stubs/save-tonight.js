@@ -1,14 +1,12 @@
 /**
  * Created by Thomas TRIBOULT on 16/02/2015.
  */
-var Song = require('../models/Song'),
-    Artist = require('../models/Artist'),
-    artist = new Artist({ name: 'Eagle Eye Cherry' });
+var Song = require('../models/Song');
 
 module.exports = {
     song: new Song({
         title: 'Save Tonight',
-        artist: artist,
+        artist: 'Eagle Eye Cherry',
         parts: [
             {
                 element: 'Intro',
@@ -21,6 +19,5 @@ module.exports = {
                 progression: ['vi', 'IV', 'I', 'V', 'vi', 'IV', 'I', 'V', 'vi', 'IV', 'I', 'V', 'vi', 'IV', 'I', 'V']
             }
         ]
-    }),
-    artist: artist
+    })
 };

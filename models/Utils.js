@@ -40,4 +40,17 @@ Utils.indexOfPoint = function (array, point) {
     return -1;
 };
 
+Utils.subLists = function(array, chunkSize) {
+    if (array.length < chunkSize)
+        return [];
+
+    var nbChunks = array.length - chunkSize + 1,
+        chunks = [];
+    for (var i=0; i<nbChunks; i++) {
+        chunks.push(array.slice(i, (i + chunkSize)));
+    }
+
+    return chunks;
+};
+
 module.exports = Utils;

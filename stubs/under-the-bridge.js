@@ -1,14 +1,12 @@
 /**
  * Created by Thomas TRIBOULT on 16/02/2015.
  */
-var Song = require('../models/Song'),
-    Artist = require('../models/Artist'),
-    artist = new Artist({ name: 'Red Hot Chili Peppers' });
+var Song = require('../models/Song');
 
 module.exports = {
     song: new Song({
         title: 'Under The Bridge',
-        artist: artist,
+        artist: 'Red Hot Chili Peppers',
         parts: [
             {
                 element: 'Intro',
@@ -26,6 +24,5 @@ module.exports = {
                 progression: ['ii', 'I', 'V', 'ii', 'ii', 'I', 'V', 'ii', 'ii', 'I', 'V', 'ii', 'ii', 'I', 'V', 'ii', 'I', 'V', 'vi', 'iii', 'IV', 'I', 'V', 'vi', 'IV']
             }
         ]
-    }),
-    artist: artist
+    })
 };

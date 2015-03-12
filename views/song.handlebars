@@ -1,44 +1,89 @@
 <div class="column row padding-reset">
-    <div class="seventeen wide column ui segment">
-        <h1>{{{ song.title }}} <small>par {{{ song.artist.name }}}</small></h1>
-        <script>
-            var progressions = [];
-        </script>
-        {{#each song.parts}}
-            <script> progressions.push({
-                root: '{{{ this.root }}}',
-                progression: '{{{ this.progression }}}'
-            });</script>
-            <div class="ui segment">
-                <div class="ui top attached label">{{{ this.element }}}</div>
-                <div class="ui grid">
-                    <div class="eight wide column">
-                        <div class="ui list">
-                            <div class="item">
-                                <div class="header">Note de base :</div>
-                                {{{ this.root }}}
-                            </div>
-                            <div class="item">
-                                <div class="header">Progression :</div>
-                                {{{ this.progression }}}
+    <div class="eleven wide column">
+        <div class="ui segment">
+            <h1>{{ song.title }} <small>par {{ song.artist }}</small></h1>
+            <script>
+                var progressions = [];
+            </script>
+            {{#song.parts}}
+                <script> progressions.push({
+                    root: '{{ root }}',
+                    progression: '{{ progression }}'
+                });</script>
+                <div class="ui segment">
+                    <div class="ui top attached label">{{ element }}</div>
+                    <div class="ui grid">
+                        <div class="six wide column">
+                            <div class="ui list">
+                                <div class="item">
+                                    <div class="header">Tonalité :</div>
+                                    <select class="ui compact dropdown" data-index="{{@index}}">
+                                        {{#each ../tones}}
+                                            <option{{#strCmp this ../root}} selected="selected"{{/strCmp}} value="{{@index}}">{{this}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <div class="ui fade animated teal button reset">
+                                        <div class="hidden content">Reset</div>
+                                        <div class="visible content"><i class="refresh icon"></i></div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="header">Progression :</div>
+                                    {{ progression }}
+                                </div>
+                                <div class="item">
+                                    <div class="header">Accords</div>
+                                    <table class="ui celled table">
+                                        <thead>
+                                        <tr>
+                                            <th>Degré</th>
+                                            <th>Accord</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{#uniqValues progression}}
+                                            <tr>
+                                                <td>{{this}}</td>
+                                                <td>{{progToChord ../root this}}</td>
+                                            </tr>
+                                        {{/uniqValues}}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="eight wide column">
-                        <div class="cercle-diatonique" data-index="{{@index}}">
-                            <div class="ui compact icon buttons">
-                                <a class="ui blue button playBtn" href="#">
-                                    <i class="play icon"></i>
-                                </a>
-                                <a class="ui red button stopBtn disabled" href="#">
-                                    <i class="stop icon"></i>
-                                </a>
+                        <div class="ten wide column">
+                            <div class="cercle-diatonique" data-index="{{@index}}">
+                                <div class="ui compact icon buttons">
+                                    <a class="ui blue button playBtn" href="#">
+                                        <i class="play icon"></i>
+                                    </a>
+                                    <a class="ui red button stopBtn disabled" href="#">
+                                        <i class="stop icon"></i>
+                                    </a>
+                                </div>
+                                <b>Accord jouée :</b> <span class="playedNote">-</span>
                             </div>
-                            <b>Note jouée :</b> <span class="playedNote">-</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        {{/each}}
+            {{/song.parts}}
+        </div>
+    </div>
+    <div class="five wide column">
+        <div class="ui segment">
+            <h2>Chansons proches</h2>
+            {{#similar}}
+                <a class="ui teal card" href="/song/{{ id }}">
+                    <div class="content">
+                        <div class="header">{{ title }}</div>
+                        <div class="meta">{{ artist }}</div>
+                        <div class="description">
+                            {{similarity.prog}} dans {{getSongSimilarPart parts similarity.part}}
+                        </div>
+                    </div>
+                </a>
+            {{/similar}}
+        </div>
     </div>
 </div>

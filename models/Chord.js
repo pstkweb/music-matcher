@@ -1,5 +1,3 @@
-var D3CyclicScale = require("./D3CyclicScale.js");
-
 function Chord(note){
     this.tonic = note;
 
@@ -9,7 +7,7 @@ function Chord(note){
         minor = true;
     }
 
-    note = D3CyclicScale.chordToCycleChord(note);
+    note = Chord.chordToCycleChord(note);
 
     this.chord = [
         note,
@@ -19,14 +17,7 @@ function Chord(note){
 }
 
 Chord.prototype.SCALE = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-
-Chord.prototype.getTonic = function() {
-    return this.tonic;
-};
-
-Chord.prototype.getChord = function() {
-    return this.chord;
-};
+Chord.prototype.CYCLIC_SCALE = ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#", "F"];
 
 Chord.prototype.getChordAsPoints = function(){
     var points = [];
@@ -34,18 +25,31 @@ Chord.prototype.getChordAsPoints = function(){
         points.push({
             x: parseFloat(
                 160 + 130 * Math.cos(
-                    Math.round(360 / D3CyclicScale.prototype.CYCLIC_SCALE.length * D3CyclicScale.prototype.CYCLIC_SCALE.indexOf(this.chord[i]) - 90) * Math.PI / 180
+                    Math.round(360 / Chord.prototype.CYCLIC_SCALE.length * Chord.prototype.CYCLIC_SCALE.indexOf(this.chord[i]) - 90) * Math.PI / 180
                 )
             ),
             y: parseFloat(
                 160 + 130 * Math.sin(
-                    Math.round(360 / D3CyclicScale.prototype.CYCLIC_SCALE.length * D3CyclicScale.prototype.CYCLIC_SCALE.indexOf(this.chord[i]) - 90) * Math.PI / 180
+                    Math.round(360 / Chord.prototype.CYCLIC_SCALE.length * Chord.prototype.CYCLIC_SCALE.indexOf(this.chord[i]) - 90) * Math.PI / 180
                 )
             )
         });
     }
 
     return points;
+};
+
+Chord.chordToCycleChord = function(chord) {
+    var cycleChord = chord;
+    if (cycleChord.match(/.*m$/)) {
+        cycleChord = cycleChord.substring(0, cycleChord.length - 1);
+    }
+
+    if (cycleChord.match(/..#$/)) {
+        cycleChord = cycleChord.substring(0, cycleChord.length - 1);
+    }
+
+    return cycleChord;
 };
 
 Chord.fromProgressionDegree = function(root, degree){
@@ -55,7 +59,12 @@ Chord.fromProgressionDegree = function(root, degree){
         note = Chord.prototype.SCALE[i % Chord.prototype.SCALE.length];
 
     if (sharp) {
-        note += "#";
+        // Double dièse
+        if (note.length > 1) {
+            note = Chord.prototype.SCALE[Chord.prototype.SCALE.indexOf(note) + 1];
+        } else {
+            note += "#";
+        }
     }
 
     if (degree.match(/[iv]+/)) {
@@ -87,6 +96,14 @@ Chord.degreeToInt = function(degree){
         default:
             return null;
     }
+};
+
+Chord.prototype.getTonic = function() {
+    return this.tonic;
+};
+
+Chord.prototype.getChord = function() {
+    return this.chord;
 };
 
 module.exports = Chord;

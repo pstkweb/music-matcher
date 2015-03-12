@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    Chord = require("../models/Chord.js");
+    Chord = require("../models/Chord");
 
 describe("Chord", function(){
     describe("#fromProgressionDegree()", function(){

@@ -4,6 +4,38 @@ var Chord = require("./models/Chord.js"),
     cerclesDiatoniques = [];
 
 $(function(){
+    // Homepage search field
+    $('.ui.search').search({
+        apiSettings: {
+            url: 'search/?q={query}'
+        },
+        error: {
+            source      : 'Impossible de rechercher.',
+            noResults   : 'Votre recherche n\'a retourné aucun résultat.',
+            serverError : 'Il y a eu un problème lors de l\'interrogation du serveur.',
+            method      : 'L\'action demandée n\'est pas définie.'
+        }
+    });
+
+    // Song page transpose dropdown
+    $('select.ui.dropdown').dropdown({
+        onChange: function(val, root){
+            // Change root for progression
+            progressions[$(this).data("index")].root = root;
+
+            // Change chords in table
+            $(this).parents('.column').first().find("table").first().find("tbody > tr").each(function(){
+                var degree = $(this).find("td").first().text();
+                $(this).find("td").last().text(Chord.fromProgressionDegree(root, degree).getTonic());
+            });
+        }
+    });
+
+    // Song page transpose reset button
+    $('.reset').on('click', function(){
+       $(this).parent().find('.ui.dropdown').dropdown('restore defaults');
+    });
+
     $('.cercle-diatonique').each(function(i){
         cerclesDiatoniques.push({
             d3: new D3CyclicScale(i),
@@ -38,7 +70,8 @@ $(function(){
 
                         d3.chordTransition(playedChord);
                     } else {
-                        clearInterval(interval);
+                        clearInterval(cerclesDiatoniques[i].interval);
+                        cerclesDiatoniques[i].interval = null;
                         cerclesDiatoniques[i].progression = progressions[i].progression.split(",");
 
                         // Reset UI
@@ -58,6 +91,7 @@ $(function(){
 
             if (interval != null) {
                 clearInterval(interval);
+                cerclesDiatoniques[i].interval = null;
                 cerclesDiatoniques[i].progression = progressions[i].progression.split(",");
 
                 // Reset UI
@@ -67,6 +101,6 @@ $(function(){
             }
 
             e.preventDefault();
-        })
+        });
     });
 });

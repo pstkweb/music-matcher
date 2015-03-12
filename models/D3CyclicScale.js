@@ -1,4 +1,5 @@
-var Utils = require("./Utils.js");
+var Utils = require("./Utils"),
+    Chord = require("./Chord");
 
 function D3CyclicScale(position) {
     // Diatonic wheel
@@ -19,11 +20,11 @@ function D3CyclicScale(position) {
     var axis = this.svg.append("svg:g")
         .attr("class", "axis")
         .selectAll("text.label")
-        .data(D3CyclicScale.prototype.CYCLIC_SCALE)
+        .data(Chord.prototype.CYCLIC_SCALE)
         .enter()
         .append("svg:g")
         .attr("transform", function(d, i){
-            return "rotate(" + Math.round(360 / D3CyclicScale.prototype.CYCLIC_SCALE.length * i - 90) + ", 160, 160) translate(290, 160)";
+            return "rotate(" + Math.round(360 / Chord.prototype.CYCLIC_SCALE.length * i - 90) + ", 160, 160) translate(290, 160)";
         });
 
     axis.append("svg:line")
@@ -60,7 +61,7 @@ function D3CyclicScale(position) {
             return D3CyclicScale.prototype.COLORS[i];
         })
         .attr("transform", function(d, i){
-            return "rotate(" + Math.round(90 - 360 / D3CyclicScale.prototype.CYCLIC_SCALE.length * i) + ")";
+            return "rotate(" + Math.round(90 - 360 / Chord.prototype.CYCLIC_SCALE.length * i) + ")";
         });
 
     // Pre-draw chord
@@ -70,6 +71,8 @@ function D3CyclicScale(position) {
 
     this.lastChord = null;
 }
+
+D3CyclicScale.prototype.COLORS = ["#bcdf3a", "#a00c08", "#1b9080", "#f88010", "#7f087c", "#f4f43c", "#700d46", "#148f34", "#fa0c0c", "#1c0d82", "#edf087", "#d81386"];
 
 D3CyclicScale.prototype.chordTransition = function(newChord) {
     // Reset the view
@@ -99,28 +102,12 @@ D3CyclicScale.prototype.chordTransition = function(newChord) {
 };
 
 D3CyclicScale.prototype.chordToColor = function(chord) {
-    return this.COLORS[this.CYCLIC_SCALE.indexOf(D3CyclicScale.chordToCycleChord(chord.getTonic()))];
-};
-
-D3CyclicScale.chordToCycleChord = function(chord) {
-    var cycleChord = chord;
-    if (cycleChord.match(/.*m$/)) {
-        cycleChord = cycleChord.substring(0, cycleChord.length - 1);
-    }
-
-    if (cycleChord.match(/..#$/)) {
-        cycleChord = cycleChord.substring(0, cycleChord.length - 1);
-    }
-
-    return cycleChord;
+    return this.COLORS[Chord.prototype.CYCLIC_SCALE.indexOf(Chord.chordToCycleChord(chord.getTonic()))];
 };
 
 D3CyclicScale.drawChord = d3.svg.line()
     .x(function(d){ return d.x; })
     .y(function(d){ return d.y; })
     .interpolate("linear");
-
-D3CyclicScale.prototype.CYCLIC_SCALE = ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#", "F"];
-D3CyclicScale.prototype.COLORS = ["#bcdf3a", "#a00c08", "#1b9080", "#f88010", "#7f087c", "#f4f43c", "#700d46", "#148f34", "#fa0c0c", "#1c0d82", "#edf087", "#d81386"];
 
 module.exports = D3CyclicScale;
