@@ -16,18 +16,14 @@ BoyerMooreHorspool.run = function(needle, haystack){
     if (needle.length == 0)
         return 0;
 
-    // Génération de la table des décalages de sauts pour
-    // une comparaison infructueuse
+    // Generate jump table
     Array.prototype.forEach.call(needle, function (char, i) {
         badMatchTable[char] = last - i;
     });
 
-    // Recherche de la chaine
+    // Search the string
     while (offset <= maxOffset) {
-        // Recherche de droite à gauche, vérifiant que les indices courants de
-        // needle et haystack correspondent. Si c'est le cas on décrémente et
-        // répète l'opération, si le permier caractère de needle correpond on
-        // retourne sa position.
+        // Right-to-left search
         for (scan=last; needle[scan] === haystack[scan+offset]; scan--) {
             if (scan === 0) {
                 return offset;
