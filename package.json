@@ -9,7 +9,9 @@
     "handlebars": "^2.0.0",
     "mongodb": "~1.4.29",
     "mongoose": "^3.8.21",
-    "serve-favicon": "^2.2.0"
+    "serve-favicon": "^2.2.0",
+    "express-handlebars": "~1.2.1",
+    "async": "~0.9.0"
   },
   "devDependencies": {
     "browserify": "~8.1.1",

@@ -1,5 +1,13 @@
 function Utils(){}
 
+/**
+ * Transform an array of points to another with the least
+ * points movements
+ * @param a The array to transform
+ * @param b The array wanted
+ * @returns {*} An array transforming b to have the least movements
+ * compared to a
+ */
 Utils.transform  = function(a, b) {
     if (b.length == 0) {
         return [];
@@ -30,6 +38,12 @@ Utils.transform  = function(a, b) {
     return a;
 };
 
+/**
+ * Get the index of a point in an array
+ * @param array The array to search in
+ * @param point The point to find
+ * @returns {number} The array index of the point, -1 if it is not found
+ */
 Utils.indexOfPoint = function (array, point) {
     for (var i=0; i<array.length; i++) {
         if (array[i].x == point.x && array[i].y == point.y) {
@@ -40,6 +54,12 @@ Utils.indexOfPoint = function (array, point) {
     return -1;
 };
 
+/**
+ * Return all sub-lists of the given list
+ * @param array The list to process
+ * @param chunkSize The size of sub-lists
+ * @returns {Array} The list of sub-lists
+ */
 Utils.subLists = function(array, chunkSize) {
     if (array.length < chunkSize)
         return [];

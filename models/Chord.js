@@ -1,3 +1,8 @@
+/**
+ * Create a chord from it's root note
+ * @param note The root note of the chord
+ * @constructor
+ */
 function Chord(note){
     this.tonic = note;
 
@@ -10,15 +15,27 @@ function Chord(note){
     note = Chord.chordToCycleChord(note);
 
     this.chord = [
-        note,
-        Chord.prototype.SCALE[(Chord.prototype.SCALE.indexOf(note) + (minor ? 3 : 4)) % Chord.prototype.SCALE.length],
-        Chord.prototype.SCALE[(Chord.prototype.SCALE.indexOf(note) + 7) % Chord.prototype.SCALE.length]
+        note, // Root
+        Chord.prototype.SCALE[(Chord.prototype.SCALE.indexOf(note) + (minor ? 3 : 4)) % Chord.prototype.SCALE.length], // Third (minor or major)
+        Chord.prototype.SCALE[(Chord.prototype.SCALE.indexOf(note) + 7) % Chord.prototype.SCALE.length] // Fifth
     ];
 }
 
+/**
+ * Chromatic scale
+ * @type {string[]}
+ */
 Chord.prototype.SCALE = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+/**
+ * Circle of fifth
+ * @type {string[]}
+ */
 Chord.prototype.CYCLIC_SCALE = ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "D#", "A#", "F"];
 
+/**
+ * Return each chord notes position on circle of fifth
+ * @returns {Array} An array of coordinates to draw the triangle
+ */
 Chord.prototype.getChordAsPoints = function(){
     var points = [];
     for (var i=0; i<this.chord.length; i++) {
@@ -39,6 +56,11 @@ Chord.prototype.getChordAsPoints = function(){
     return points;
 };
 
+/**
+ * Re arrange chord to get one in the chromatic scale
+ * @param chord The chord to transform
+ * @returns {*} The chord without alterations except sharp
+ */
 Chord.chordToCycleChord = function(chord) {
     var cycleChord = chord;
     if (cycleChord.match(/.*m$/)) {
@@ -52,6 +74,12 @@ Chord.chordToCycleChord = function(chord) {
     return cycleChord;
 };
 
+/**
+ * Create a chord from a progression
+ * @param root The root of the progression
+ * @param degree The degree in this progression
+ * @returns {Chord} A Chord
+ */
 Chord.fromProgressionDegree = function(root, degree){
     var sharp = (root.length > 1),
         intDegree = Chord.degreeToInt(degree),
@@ -59,7 +87,7 @@ Chord.fromProgressionDegree = function(root, degree){
         note = Chord.prototype.SCALE[i % Chord.prototype.SCALE.length];
 
     if (sharp) {
-        // Double dièse
+        // Double diese
         if (note.length > 1) {
             note = Chord.prototype.SCALE[Chord.prototype.SCALE.indexOf(note) + 1];
         } else {
@@ -67,6 +95,7 @@ Chord.fromProgressionDegree = function(root, degree){
         }
     }
 
+    // Minor
     if (degree.match(/[iv]+/)) {
         note += "m";
     }
@@ -74,6 +103,11 @@ Chord.fromProgressionDegree = function(root, degree){
     return new Chord(note);
 };
 
+/**
+ * Get the int value of progression roman number degrees
+ * @param degree The roman number degree
+ * @returns {*} The int value of it or null if not in scope
+ */
 Chord.degreeToInt = function(degree){
     switch (degree) {
         case 'I':
@@ -98,10 +132,18 @@ Chord.degreeToInt = function(degree){
     }
 };
 
+/**
+ * Get the tonic of that chord
+ * @returns {*} The tonic (equals to the root) of the chord
+ */
 Chord.prototype.getTonic = function() {
     return this.tonic;
 };
 
+/**
+ * Get the three notes of the chord
+ * @returns {Array} The chord notes
+ */
 Chord.prototype.getChord = function() {
     return this.chord;
 };

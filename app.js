@@ -1,7 +1,7 @@
 var Chord = require("./models/Chord.js"),
     Utils = require("./models/Utils.js"),
-    D3CyclicScale = require("./models/D3CyclicScale.js"),
-    cerclesDiatoniques = [];
+    D3FifthCircle = require("./models/D3FifthCircle.js"),
+    cerclesQuintes = [];
 
 $(function(){
     // Homepage search field
@@ -36,9 +36,9 @@ $(function(){
        $(this).parent().find('.ui.dropdown').dropdown('restore defaults');
     });
 
-    $('.cercle-diatonique').each(function(i){
-        cerclesDiatoniques.push({
-            d3: new D3CyclicScale(i),
+    $('.cercle-quintes').each(function(i){
+        cerclesQuintes.push({
+            d3: new D3FifthCircle(i),
             interval: null,
             progression: progressions[i].progression.split(",")
         });
@@ -48,10 +48,10 @@ $(function(){
         $(this).find('.playBtn').on('click', function(e){
             $container.find('.playBtn, .stopBtn').toggleClass("disabled");
 
-            var interval = cerclesDiatoniques[i].interval,
-                d3 = cerclesDiatoniques[i].d3,
+            var interval = cerclesQuintes[i].interval,
+                d3 = cerclesQuintes[i].d3,
                 root = progressions[i].root,
-                progression = cerclesDiatoniques[i].progression;
+                progression = cerclesQuintes[i].progression;
 
             if (interval == null) {
                 // Show first chord
@@ -62,7 +62,7 @@ $(function(){
                 d3.chordTransition(playedChord);
 
                 // Run process
-                cerclesDiatoniques[i].interval = setInterval(function() {
+                cerclesQuintes[i].interval = setInterval(function() {
                     if (progression.length > 0) {
                         var playedChord = Chord.fromProgressionDegree(root, progression.shift());
 
@@ -70,9 +70,9 @@ $(function(){
 
                         d3.chordTransition(playedChord);
                     } else {
-                        clearInterval(cerclesDiatoniques[i].interval);
-                        cerclesDiatoniques[i].interval = null;
-                        cerclesDiatoniques[i].progression = progressions[i].progression.split(",");
+                        clearInterval(cerclesQuintes[i].interval);
+                        cerclesQuintes[i].interval = null;
+                        cerclesQuintes[i].progression = progressions[i].progression.split(",");
 
                         // Reset UI
                         $container.find('.playedNote').text("-");
@@ -86,13 +86,13 @@ $(function(){
         });
 
         $(this).find(".stopBtn").on('click', function(e){
-            var interval = cerclesDiatoniques[i].interval,
-                d3 = cerclesDiatoniques[i].d3;
+            var interval = cerclesQuintes[i].interval,
+                d3 = cerclesQuintes[i].d3;
 
             if (interval != null) {
                 clearInterval(interval);
-                cerclesDiatoniques[i].interval = null;
-                cerclesDiatoniques[i].progression = progressions[i].progression.split(",");
+                cerclesQuintes[i].interval = null;
+                cerclesQuintes[i].progression = progressions[i].progression.split(",");
 
                 // Reset UI
                 $container.find('.playedNote').text("-");

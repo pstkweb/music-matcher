@@ -1,6 +1,3 @@
-/**
- * Created by Thomas TRIBOULT on 16/02/2015.
- */
 var mongoose = require("mongoose"),
     async = require("async"),
     Utils = require("./Utils"),
@@ -107,6 +104,10 @@ schema.methods.findSimilar = function(callback){
 
                     return false;
                 }, currentSong);
+
+                // Reduce to first five
+                if (simSongs.length > 5)
+                    simSongs.length = 5;
 
                 callback(simSongs);
             }
