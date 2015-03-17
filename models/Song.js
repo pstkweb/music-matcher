@@ -25,7 +25,7 @@ schema.methods.findSimilar = function(callback){
             if (!err) {
                 var simSongs = songs.filter(function(song){
                     for (var i=0; i<this.parts.length; i++) {
-                        var chunks = Utils.subLists(this.parts[i].progression, 4);
+                        var chunks = Utils.subLists(this.parts[i].progression, config.sublists_length);
                         for (var j in chunks) {
                             for (var k=0; k<song.parts.length; k++) {
                                 if (BMH.run(chunks[j], song.parts[k].progression) != -1) {
@@ -43,8 +43,8 @@ schema.methods.findSimilar = function(callback){
                 }, currentSong);
 
                 // Reduce to first five
-                if (simSongs.length > 5)
-                    simSongs.length = 5;
+                if (simSongs.length > config.max_similar_songs)
+                    simSongs.length = config.max_similar_songs;
 
                 callback(simSongs);
             }

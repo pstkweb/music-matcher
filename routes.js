@@ -7,7 +7,7 @@ var path = require('path'),
 module.exports = {
     // Homepage
     index: function(req, res) {
-        Song.findRandom({}, {}, {limit: 4}, function(err, songs){
+        Song.findRandom({}, {}, {limit: config.random_songs}, function(err, songs){
             if (!err) {
                 res.render('homepage', {
                     songs: songs,
@@ -38,7 +38,7 @@ module.exports = {
     // AJAX search method
     search: function(req, res) {
         Song.find({ $text: { $search: req.query.q}})
-            .limit(10)
+            .limit(config.search_results)
             .exec(function(err, songs){
                 if (!err) {
                     var result = {
