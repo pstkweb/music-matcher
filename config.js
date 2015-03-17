@@ -7,4 +7,4 @@ module.exports = {
         server: 'localhost',
         db: 'music-matcher'
     }
-}
+};

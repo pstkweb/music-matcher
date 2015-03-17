@@ -1,7 +1,7 @@
 var mongoose = require("mongoose"),
-    async = require("async"),
     Utils = require("./Utils"),
     BMH = require("./BoyerMooreHorspool"),
+    random = require('mongoose-simple-random'),
     schema = new mongoose.Schema({
         title: String,
         artist: String,
@@ -12,52 +12,11 @@ var mongoose = require("mongoose"),
         }]
     });
 
+// Add random support
+schema.plugin(random);
+
 // Set the full text search index on song title and artist name
 schema.index({title: 'text', artist: 'text'});
-
-schema.statics.random = function(nb, callback) {
-    var indexes = [],
-        find = function(){
-            var songs = [],
-                calls = [];
-
-            indexes.forEach(function(i){
-                calls.push(function(callback){
-                    Song.findOne()
-                        .skip(indexes[i])
-                        .exec(function(err, song){
-                            if (err)
-                                return callback(err);
-
-                            songs.push(song);
-                            callback(null, song);
-                        });
-                });
-            });
-
-            async.parallel(calls, function(err, song){
-                if (!err) {
-                    callback(songs);
-                }
-            });
-        };
-
-    this.count(function(err, count) {
-        if (err) {
-            return;
-        }
-
-        while (indexes.length < nb) {
-            var rand = Math.floor(Math.random() * count);
-
-            if (indexes.indexOf(rand) == -1) {
-                indexes.push(rand);
-            }
-        }
-
-        find();
-    });
-};
 
 schema.methods.findSimilar = function(callback){
     var currentSong = this;

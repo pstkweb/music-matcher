@@ -7,11 +7,15 @@ var path = require('path'),
 module.exports = {
     // Homepage
     index: function(req, res) {
-        Song.random(4, function(songs){
-            res.render('homepage', {
-                songs: songs,
-                homepage: true
-            });
+        Song.findRandom({}, {}, {limit: 4}, function(err, songs){
+            if (!err) {
+                res.render('homepage', {
+                    songs: songs,
+                    homepage: true
+                });
+            } else {
+                res.redirect('/error');
+            }
         });
     },
     // View song page
