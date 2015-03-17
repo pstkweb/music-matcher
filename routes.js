@@ -1,7 +1,8 @@
 var path = require('path'),
     mongoose = require('mongoose'),
     fs = require('fs'),
-    Song = require('./models/Song');
+    Song = require('./models/Song'),
+    Chord = require('./models/Chord');
 
 module.exports = {
     // Homepage
@@ -15,32 +16,43 @@ module.exports = {
     },
     // View song page
     song: function(req, res) {
-        Song.getSong(req.params.id, function(song){
-            song.findSimilar(function(songs){
-                res.render('song', {
-                    song: song,
-                    similar: songs,
-                    tones: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-                });
+        Song.findOne({_id: req.params.id})
+            .exec(function(err, song){
+                if (!err) {
+                    song.findSimilar(function(songs){
+                        res.render('song', {
+                            song: song,
+                            similar: songs,
+                            tones: Chord.prototype.SCALE
+                        });
+                    });
+                } else {
+                    res.redirect("/error");
+                }
             });
-        });
     },
     // AJAX search method
     search: function(req, res) {
-        Song.search(req.query.q, 10, function(songs){
-            var result = {
-                results: []
-            };
+        Song.find({ $text: { $search: req.query.q}})
+            .limit(10)
+            .exec(function(err, songs){
+                if (!err) {
+                    var result = {
+                        results: []
+                    };
 
-            for (var i in songs) {
-                result.results.push({
-                    title: songs[i].title,
-                    description: 'Par ' + songs[i].artist,
-                    url: '/song/' + songs[i].id
-                });
-            }
-            res.send(result);
-        });
+                    for (var i in songs) {
+                        result.results.push({
+                            title: songs[i].title,
+                            description: 'Par ' + songs[i].artist,
+                            url: '/song/' + songs[i].id
+                        });
+                    }
+                    res.send(result);
+                } else {
+                    res.status(500).send("error");
+                }
+            });
     },
     // Clean and recreate database with stubs data
     loadData: function(req, res) {

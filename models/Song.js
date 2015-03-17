@@ -15,18 +15,6 @@ var mongoose = require("mongoose"),
 // Set the full text search index on song title and artist name
 schema.index({title: 'text', artist: 'text'});
 
-schema.statics.getSong = function(id, callback) {
-    var song = {};
-    Song.findOne({_id: id})
-        .exec(function(err, doc){
-            if (!err) {
-                song = doc;
-            }
-
-            callback(song);
-        });
-};
-
 schema.statics.random = function(nb, callback) {
     var indexes = [],
         find = function(){
@@ -69,16 +57,6 @@ schema.statics.random = function(nb, callback) {
 
         find();
     });
-};
-
-schema.statics.search = function(q, limit, callback){
-    Song.find({ $text: { $search: q}})
-        .limit(limit)
-        .exec(function(err, songs){
-            if (!err) {
-                callback(songs);
-            }
-        });
 };
 
 schema.methods.findSimilar = function(callback){

@@ -56,7 +56,7 @@ function D3FifthCircle(position) {
             return -(this.getBBox().width / 2);
         })
         .attr("y", function(d, i){
-            if (i == 0) {
+            if (i === 0) {
                 return -8;
             } else if (i > 3 && i < 9) {
                 return this.getBBox().height;
@@ -91,7 +91,7 @@ D3FifthCircle.prototype.COLORS = ["#bcdf3a", "#a00c08", "#1b9080", "#f88010", "#
  */
 D3FifthCircle.prototype.chordTransition = function(newChord) {
     // Reset the view
-    if (newChord == null) {
+    if (newChord === null) {
         this.lastChord = null;
 
         this.chord.transition()
@@ -103,7 +103,7 @@ D3FifthCircle.prototype.chordTransition = function(newChord) {
         return;
     }
 
-    if (this.lastChord == null) {
+    if (this.lastChord === null) {
         // First chord of the progression
         this.lastChord = newChord.getChordAsPoints();
     } else {
