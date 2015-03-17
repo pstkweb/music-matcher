@@ -46,11 +46,13 @@ module.exports = {
                     };
 
                     for (var i in songs) {
-                        result.results.push({
-                            title: songs[i].title,
-                            description: 'Par ' + songs[i].artist,
-                            url: '/song/' + songs[i].id
-                        });
+                        if (songs.hasOwnProperty(i)) {
+                            result.results.push({
+                                title: songs[i].title,
+                                description: 'Par ' + songs[i].artist,
+                                url: '/song/' + songs[i].id
+                            });
+                        }
                     }
                     res.send(result);
                 } else {

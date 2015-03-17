@@ -2,8 +2,8 @@ var Utils = require("./Utils"),
     Chord = require("./Chord");
 
 /**
- * Create a D3 vizualisation of the circle of fifth
- * @param The position of this circle in the page
+ * Create a D3 visualisation of the circle of fifth
+ * @param position The position of this circle in the page
  * @constructor
  */
 function D3FifthCircle(position) {

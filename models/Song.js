@@ -28,12 +28,14 @@ schema.methods.findSimilar = function(callback){
                         var chunks = Utils.subLists(this.parts[i].progression, config.sublists_length);
                         for (var j in chunks) {
                             for (var k=0; k<song.parts.length; k++) {
-                                if (BMH.run(chunks[j], song.parts[k].progression) != -1) {
-                                    song.similarity = {
-                                        part: k,
-                                        prog: chunks[j]
-                                    };
-                                    return true;
+                                if (chunks.hasOwnProperty(j)) {
+                                    if (BMH.run(chunks[j], song.parts[k].progression) != -1) {
+                                        song.similarity = {
+                                            part: k,
+                                            prog: chunks[j]
+                                        };
+                                        return true;
+                                    }
                                 }
                             }
                         }

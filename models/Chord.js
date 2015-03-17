@@ -140,12 +140,4 @@ Chord.prototype.getTonic = function() {
     return this.tonic;
 };
 
-/**
- * Get the three notes of the chord
- * @returns {Array} The chord notes
- */
-Chord.prototype.getChord = function() {
-    return this.chord;
-};
-
 module.exports = Chord;
